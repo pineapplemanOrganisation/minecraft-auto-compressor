@@ -1,0 +1,56 @@
+command /itemsav [<text>] [<text>] [<number>]:
+    permission: op
+    trigger:
+        if arg-1 is "save":
+            if arg-2 is set:
+                set {item::%arg-2%} to player's held item
+                send "&2Item Saved! - %arg-2%" to player
+        if arg-1 is "give":
+            if arg-2 is set:
+                if {item::%arg-2%} is set:
+                    give player {item::%arg-2%}
+                    send "&2Item given! - %arg-2%" to player
+        if arg-1 is "list":
+            loop {item::*}:
+                send "%loop-index% - %loop-value%" to player
+        if arg-1 is "clear":
+            delete {item::*}
+        if arg-1 is "delete":
+            delete {item::%arg-2%}
+command /autocommpactergive <player>:
+    trigger:
+        if player has permission "autocommpacter.give":
+            add 1 clock named "&6&kxx &cAuto Compacter &6&kxx" with lore "&arightclick or hold in offhand" and "&ato auto compress/compact items" to player's inventory
+        else:
+            send "&cyou don't have permission to use this command"
+command /compresssave <text> <text> <number> [<text>]:
+    permission: op
+    trigger:
+        if arg-4 is "list":
+            loop {compress::*}:
+                send "%loop-index% - %loop-value%" to player
+            stop
+        if arg-4 is "clear":
+            delete {compress::*}
+            stop
+        if arg-4 is "delete":
+            delete {compress::%arg-1%}
+            stop
+        set {compress::%arg-1%} to arg-2
+        set {compress::%arg-1%.amount} to arg-3
+function compress(p: player):
+    loop {compress::*}:
+        if {_p} has {item::%loop-index%}:
+            remove {item::%loop-index%} from {_p}'s inventory
+            give {_p} 1 of {item::%loop-value%}
+on rightclick with clock:
+    if name of tool of player is "&6&kxx &cAuto Compacter &6&kxx":
+        loop 100 times:
+            compress(player)
+
+every 1 second:
+  loop all players:
+    if loop-player's offhand tool is clock named "&6&kxx &cAuto Compacter &6&kxx":
+      loop 100 times:
+        compress(loop-player)
+#pineapples
