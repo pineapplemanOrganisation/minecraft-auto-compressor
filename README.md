@@ -12,3 +12,8 @@ to give player autocompacter type "/autocommpactergive <player>"
 
 to use autocompacter hold it in off hand or right click on it
 
+to see the list of saved items do /iitmsav list
+
+to delete item from list of saved items do /itemsav delete [name of the item]
+
+to delete all items from list do /itemsav clear
